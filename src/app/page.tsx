@@ -32,7 +32,7 @@ export default function Home() {
         <div className="text-center mb-12">
           <div className="text-6xl mb-4">🔍</div>
           <h1 className="text-4xl font-bold text-white mb-3">
-            MediaLens India
+            MediaMirror India
           </h1>
           <p className="text-gray-400 text-lg">
             See how Indian news channels cover the same story differently
