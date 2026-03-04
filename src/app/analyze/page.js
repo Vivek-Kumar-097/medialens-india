@@ -6,10 +6,21 @@ import SourceCard from "@/components/SourceCard";
 import BiasRadar from "@/components/BiasRadar";
 import ConsensusBox from "@/components/ConsensusBox";
 
+const LOADING_MESSAGES = [
+  "📡 Fetching live headlines from 6 sources...",
+  "🔍 Reading between the lines...",
+  "🤖 AI detecting spin cycles...",
+  "⚖️ Counting loaded words...",
+  "🧠 Comparing framing patterns...",
+  "📊 Calculating bias scores...",
+  "✍️ Writing your analysis...",
+];
+
 function AnalyzeContent() {
   const searchParams = useSearchParams();
   const topic = searchParams.get("topic") || "Modi";
 
+  const [loadingMsg, setLoadingMsg] = useState("📡 Fetching live headlines...");
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState("Fetching live headlines...");
@@ -18,6 +29,16 @@ function AnalyzeContent() {
   useEffect(() => {
     analyze();
   }, [topic]);
+
+  useEffect(() => {
+    if (!loading) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      i = (i + 1) % LOADING_MESSAGES.length;
+      setLoadingMsg(LOADING_MESSAGES[i]);
+    }, 1800);
+    return () => clearInterval(interval);
+  }, [loading]);
 
   async function analyze() {
     try {
@@ -33,7 +54,7 @@ function AnalyzeContent() {
 
       if (!headlines?.length) {
         throw new Error(
-          "No headlines found for this topic. Try a different search."
+          `No Indian news coverage found for "${topic}" right now. Try: Modi, Kashmir, Economy, or Supreme Court.`
         );
       }
 
@@ -64,7 +85,7 @@ function AnalyzeContent() {
       <div className="min-h-screen bg-gray-950 flex items-center justify-center">
         <div className="text-center">
           <div className="text-5xl mb-6 animate-pulse">🔍</div>
-          <p className="text-white text-lg font-medium mb-2">{step}</p>
+          <p className="text-white text-lg font-medium mb-2">{loadingMsg}</p>
           <p className="text-gray-500 text-sm">
             Analyzing "{topic}" — takes 5-10 seconds
           </p>
@@ -121,7 +142,12 @@ function AnalyzeContent() {
           </h1>
           <p className="text-gray-400 text-sm">
             {results.sources?.length} sources analyzed • Confidence:{" "}
-            {results.confidence_score}%
+            {results.confidence_score}% •{" "}
+            {new Date().toLocaleTimeString("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}{" "}
+            IST
           </p>
         </div>
 
@@ -146,6 +172,8 @@ function AnalyzeContent() {
           </div>
         </div>
 
+        
+
         {/* Radar Chart */}
         <BiasRadar sources={results.sources} />
 
@@ -164,6 +192,44 @@ function AnalyzeContent() {
           .map((source, i) => (
             <SourceCard key={i} source={source} />
           ))}
+
+        {/* Share Button */}
+        <div className="mb-4">
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+              `I just analyzed Indian media coverage of "${
+                results.topic
+              }" 🔍\n\nMost neutral: ${
+                mostNeutral?.name || "?"
+              }\nMost biased: ${
+                mostBiased?.name || "?"
+              }\n\nSee the full breakdown 👇\nhttps://medialens-india.vercel.app`
+            )}`}
+            target="_blank"
+            className="block w-full text-center bg-gray-800 hover:bg-gray-700
+             border border-gray-700 text-white py-3 rounded-xl
+             font-semibold transition-colors mb-3"
+          >
+            𝕏 Share this analysis
+          </a>
+          <a
+            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+              `Check how Indian media covers "${
+                results.topic
+              }" differently 🔍\n\nMost neutral: ${
+                mostNeutral?.name || "?"
+              }\nMost biased: ${
+                mostBiased?.name || "?"
+              }\n\nhttps://medialens-india.vercel.app`
+            )}`}
+            target="_blank"
+            className="block w-full text-center bg-green-900/50 hover:bg-green-900
+             border border-green-800 text-green-300 py-3 rounded-xl
+             font-semibold transition-colors"
+          >
+            💬 Share on WhatsApp
+          </a>
+        </div>
 
         {/* Footer */}
         <div className="text-center mt-8 pt-8 border-t border-gray-800">

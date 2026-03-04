@@ -9,22 +9,23 @@ export async function POST(request) {
 
   // Build text block for each source
   const sourcesText = headlines
-    .map(
-      (h) =>
-        `SOURCE: ${h.source.name}
-  COUNTRY: ${h.source.country}
-  OWNERSHIP: ${h.source.ownership}
-  KNOWN BIAS: ${h.source.bias_label}
-  ARTICLES:
-  ${h.articles
-    .map(
-      (a, i) =>
-        `  ${i + 1}. HEADLINE: "${a.title}"
-       DESCRIPTION: "${a.description || "No description"}"`
-    )
-    .join("\n")}`
-    )
-    .join("\n\n---\n\n");
+  .map(
+    (h) =>
+      `SOURCE_ID: ${h.source.id}
+SOURCE_NAME: ${h.source.name}
+COUNTRY: ${h.source.country}
+OWNERSHIP: ${h.source.ownership}
+KNOWN_BIAS: ${h.source.bias_label}
+ARTICLES:
+${h.articles
+  .map(
+    (a, i) =>
+      `  ${i + 1}. HEADLINE: "${a.title}"
+     DESCRIPTION: "${a.description || "No description"}"`
+  )
+  .join("\n")}`
+  )
+  .join("\n\n---\n\n");
 
   const prompt = `You are a neutral Indian media analyst with deep knowledge of Indian politics and journalism.
   
@@ -45,7 +46,7 @@ export async function POST(request) {
     "key_difference": "The single biggest framing difference between sources in one sentence",
     "sources": [
       {
-        "id": "source id matching input",
+        "id": "MUST be the exact SOURCE_ID value from the input above",
         "name": "source name",
         "country": "🇮🇳",
         "ownership": "owner name",
