@@ -248,7 +248,7 @@ function AnalyzeContent() {
             Analyze Another Topic
           </a>
           <p className="text-gray-600 text-xs mt-4">
-            MediaLens India • Free • Open Source
+          MediaMirror • Free • Open Source
           </p>
         </div>
       </div>

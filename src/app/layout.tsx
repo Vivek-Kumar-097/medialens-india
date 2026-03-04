@@ -13,15 +13,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "MediaLens India — News Bias Detector",
+  title: "MediaMirror — News Bias Detector",
   description:
     "See how 6 Indian news outlets cover the same story differently. AI-powered bias analysis.",
   openGraph: {
-    title: "MediaLens India — News Bias Detector",
+    title: "MediaMirror — News Bias Detector",
     description:
       "AI-powered tool that shows how Indian media frames the same story differently.",
-    url: "https://medialens-india.vercel.app",
-    siteName: "MediaLens India",
+    url: "https://mediamirror.vercel.app",
+    siteName: "MediaMirror",
   },
 };
 
