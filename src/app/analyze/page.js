@@ -66,10 +66,15 @@ function AnalyzeContent() {
         body: JSON.stringify({ headlines, topic }),
       });
 
-      if (!analysisRes.ok) throw new Error("Analysis failed");
-
       const analysis = await analysisRes.json();
-      if (analysis.error) throw new Error(analysis.error);
+
+      if (analysisRes.status === 429 || analysis.error?.toLowerCase().includes('rate limit')) {
+        throw new Error('Rate limit reached. Please try again in a few minutes.');
+      }
+      
+      if (!analysisRes.ok || analysis.error) {
+        throw new Error(analysis.error || "Analysis failed. Please try again.");
+      }
 
       setResults(analysis);
     } catch (err) {
@@ -105,7 +110,11 @@ function AnalyzeContent() {
         <div className="text-center max-w-md">
           <div className="text-5xl mb-4">⚠️</div>
           <h2 className="text-white text-xl font-bold mb-2">Analysis Failed</h2>
-          <p className="text-gray-400 mb-6">{error}</p>
+          <p className="text-gray-400 mb-6">
+            {error?.includes("rate_limit") || error?.includes("Rate limit")
+              ? "Our AI is taking a short break due to high usage. Please try again in a few minutes."
+              : error}
+          </p>
           <a href="/" className="bg-blue-600 text-white px-6 py-3 rounded-xl">
             Try Again
           </a>
@@ -171,8 +180,6 @@ function AnalyzeContent() {
             </div>
           </div>
         </div>
-
-        
 
         {/* Radar Chart */}
         <BiasRadar sources={results.sources} />

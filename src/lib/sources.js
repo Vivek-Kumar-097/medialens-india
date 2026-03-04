@@ -1,7 +1,5 @@
-// lib/sources.js — UPDATED with verified working RSS URLs
-
 export const INDIAN_NEWS_SOURCES = [
-  // ✅ WORKING — keep these exactly as they are
+  // English — Left to Centre
   {
     id: 'thehindu',
     name: 'The Hindu',
@@ -29,33 +27,33 @@ export const INDIAN_NEWS_SOURCES = [
     color: '#DC2626',
     ownership: 'Adani Group (since 2022)'
   },
-
-  // 🔄 REPLACED — fixed URLs below
-  {
-    id: 'hindustantimes',
-    name: 'Hindustan Times',
-    country: '🇮🇳',
-    rss: 'https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml',
-    bias_label: 'Centre-Right',
-    color: '#EF4444',
-    ownership: 'HT Media Ltd'
-  },
   {
     id: 'indiatoday',
     name: 'India Today',
     country: '🇮🇳',
-    rss: 'https://www.indiatoday.in/rss/home', // ← fixed
+    rss: 'https://www.indiatoday.in/rss/home',
     bias_label: 'Centre-Right',
     color: '#F59E0B',
     ownership: 'Living Media India'
   },
+
+  // Hindi — adds completely different perspective
   {
-    id: 'firstpost',
-    name: 'Firstpost',             // ← replaced The Wire (broken)
+    id: 'aajtak',
+    name: 'Aaj Tak',
     country: '🇮🇳',
-    rss: 'https://www.firstpost.com/commonfeeds/v1/mfp/rss/india.xml',
+    rss: 'https://aajtak.in/rssfeeds/?id=home',
+    bias_label: 'Centre-Right / High TRP',
+    color: '#EF4444',
+    ownership: 'TV Today Network (India Today Group)'
+  },
+  {
+    id: 'zeenews',
+    name: 'Zee News',
+    country: '🇮🇳',
+    rss: 'https://zeenews.india.com/rss/india-national-news.xml',
     bias_label: 'Right / Pro-Government',
-    color: '#10B981',
-    ownership: 'Network18 (Mukesh Ambani)'
+    color: '#6366F1',
+    ownership: 'Essel Group (Subhash Chandra)'
   }
 ];

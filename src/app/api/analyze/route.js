@@ -9,9 +9,9 @@ export async function POST(request) {
 
   // Build text block for each source
   const sourcesText = headlines
-  .map(
-    (h) =>
-      `SOURCE_ID: ${h.source.id}
+    .map(
+      (h) =>
+        `SOURCE_ID: ${h.source.id}
 SOURCE_NAME: ${h.source.name}
 COUNTRY: ${h.source.country}
 OWNERSHIP: ${h.source.ownership}
@@ -24,8 +24,8 @@ ${h.articles
      DESCRIPTION: "${a.description || "No description"}"`
   )
   .join("\n")}`
-  )
-  .join("\n\n---\n\n");
+    )
+    .join("\n\n---\n\n");
 
   const prompt = `You are a neutral Indian media analyst with deep knowledge of Indian politics and journalism.
   
@@ -105,8 +105,17 @@ ${h.articles
 
     if (!data.choices?.[0]?.message?.content) {
       console.error("Groq response:", JSON.stringify(data));
+
+      // Check for rate limit specifically
+      if (data.error?.code === "rate_limit_exceeded") {
+        return Response.json(
+          { error: "Rate limit reached. Please try again in a few minutes." },
+          { status: 429 }
+        );
+      }
+
       return Response.json(
-        { error: "Groq returned empty response", raw: data },
+        { error: "Analysis failed. Please try again." },
         { status: 500 }
       );
     }
